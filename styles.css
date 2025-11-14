@@ -1,0 +1,473 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    min-height: 100vh;
+    overflow: hidden;
+}
+
+.header {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 15px 30px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.header h1 {
+    font-size: 24px;
+}
+
+.language-selector {
+    padding: 8px 15px;
+    border-radius: 5px;
+    border: none;
+    background: white;
+    color: #374151;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.toolbar {
+    background: white;
+    padding: 10px 20px;
+    display: flex;
+    gap: 10px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    flex-wrap: wrap;
+}
+
+.btn {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 600;
+    transition: all 0.2s;
+    color: white;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.btn-icon {
+    font-size: 18px;
+}
+
+.btn-generate {
+    background: #10b981;
+}
+
+.btn-generate:hover {
+    background: #059669;
+    transform: translateY(-2px);
+}
+
+.btn-upload {
+    background: #8b5cf6;
+}
+
+.btn-upload:hover {
+    background: #7c3aed;
+    transform: translateY(-2px);
+}
+
+.btn-config {
+    background: #f59e0b;
+}
+
+.btn-config:hover {
+    background: #d97706;
+}
+
+.btn-clear {
+    background: #ef4444;
+}
+
+.btn-clear:hover {
+    background: #dc2626;
+}
+
+.main-container {
+    display: flex;
+    height: calc(100vh - 140px);
+    padding: 10px;
+    gap: 10px;
+}
+
+.blockly-container {
+    flex: 1;
+    background: white;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+}
+
+#blocklyDiv {
+    height: 100%;
+    width: 100%;
+}
+
+/* ===== CORRECCIÓN PARA BLOCKLY TOOLBOX ===== */
+
+/* Resetear estilos que puedan estar afectando el toolbox de Blockly */
+.blocklyToolboxDiv {
+    background-color: #ddd !important;
+    overflow-x: visible !important;
+    overflow-y: auto !important;
+}
+
+.blocklyTreeRoot {
+    padding: 4px 0 !important;
+}
+
+.blocklyTreeRow {
+    height: auto !important;
+    line-height: normal !important;
+    margin-bottom: 4px !important;
+    padding-left: 8px !important;
+    padding-right: 8px !important;
+}
+
+/* Asegurar que todos los elementos del toolbox estén alineados */
+.blocklyTreeLabel {
+    cursor: pointer !important;
+    padding: 8px !important;
+    margin: 0 !important;
+    text-indent: 0 !important;
+}
+
+/* Corregir cualquier margen o padding extraño */
+.blocklyTreeSelected .blocklyTreeLabel {
+    background-color: #57e !important;
+}
+
+.blocklyTreeIcon {
+    background-image: none !important;
+    height: 0 !important;
+    width: 0 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+.blocklyFlyout {
+    overflow: visible !important;
+}
+
+.code-panel {
+    width: 400px;
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+    display: flex;
+    flex-direction: column;
+}
+
+.code-tabs {
+    display: flex;
+    background: #f8f9fa;
+    border-radius: 10px 10px 0 0;
+}
+
+.code-tab {
+    flex: 1;
+    padding: 12px;
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    font-weight: 600;
+    color: #6b7280;
+    transition: all 0.2s;
+}
+
+.code-tab.active {
+    background: #1e293b;
+    color: white;
+}
+
+.code-tab:hover:not(.active) {
+    background: #e5e7eb;
+}
+
+.code-content {
+    flex: 1;
+    overflow-y: auto;
+    background: #1e293b;
+    color: #10b981;
+    padding: 20px;
+    font-family: 'Courier New', monospace;
+    font-size: 13px;
+    line-height: 1.5;
+    white-space: pre-wrap;
+}
+
+.status-bar {
+    background: #f8f9fa;
+    padding: 10px 15px;
+    border-top: 1px solid #dee2e6;
+    font-size: 12px;
+    color: #6b7280;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.status-indicator {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.status-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #ef4444;
+    animation: pulse 2s infinite;
+}
+
+.status-dot.online {
+    background: #10b981;
+}
+
+@keyframes pulse {
+    0%, 100% {
+        opacity: 1;
+    }
+
+    50% {
+        opacity: 0.5;
+    }
+
+}
+
+/* Modal */
+.modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.7);
+    z-index: 1000;
+    align-items: center;
+    justify-content: center;
+    animation: fadeIn 0.3s;
+}
+
+.modal.active {
+    display: flex;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+
+}
+
+.modal-content {
+    background: white;
+    padding: 0;
+    border-radius: 15px;
+    max-width: 700px;
+    width: 90%;
+    max-height: 80vh;
+    overflow-y: auto;
+    animation: slideUp 0.3s;
+}
+
+@keyframes slideUp {
+    from {
+        transform: translateY(50px);
+        opacity: 0;
+    }
+
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+
+}
+
+.modal-header {
+    padding: 20px 30px;
+    border-bottom: 2px solid #e5e7eb;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 20px;
+    font-weight: 600;
+    color: #374151;
+}
+
+.modal-close {
+    background: none;
+    border: none;
+    font-size: 24px;
+    cursor: pointer;
+    color: #6b7280;
+    padding: 0;
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 5px;
+    transition: all 0.2s;
+}
+
+.modal-close:hover {
+    background: #f3f4f6;
+    color: #ef4444;
+}
+
+.config-grid {
+    padding: 30px;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+}
+
+.config-group {
+    display: flex;
+    flex-direction: column;
+}
+
+.config-group label {
+    font-weight: 600;
+    margin-bottom: 5px;
+    color: #374151;
+    font-size: 13px;
+}
+
+.config-group select {
+    padding: 10px;
+    border: 2px solid #e5e7eb;
+    border-radius: 5px;
+    font-size: 14px;
+    background: white;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.config-group select:focus {
+    border-color: #667eea;
+    outline: none;
+}
+
+.modal-footer {
+    padding: 20px 30px;
+    border-top: 2px solid #e5e7eb;
+    display: flex;
+    gap: 10px;
+}
+
+.modal-footer .btn {
+    flex: 1;
+}
+
+/* Barra de Progreso */
+.progress-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.8);
+    z-index: 2000;
+    align-items: center;
+    justify-content: center;
+}
+
+.progress-overlay.active {
+    display: flex;
+}
+
+.progress-container {
+    background: white;
+    padding: 40px;
+    border-radius: 15px;
+    min-width: 400px;
+    text-align: center;
+}
+
+.progress-title {
+    font-size: 24px;
+    font-weight: 600;
+    color: #374151;
+    margin-bottom: 20px;
+}
+
+.progress-bar {
+    width: 100%;
+    height: 30px;
+    background: #e5e7eb;
+    border-radius: 15px;
+    overflow: hidden;
+    margin-bottom: 10px;
+}
+
+.progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #667eea, #764ba2);
+    width: 0%;
+    transition: width 0.3s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-weight: 600;
+}
+
+.progress-text {
+    font-size: 20px;
+    font-weight: 600;
+    color: #667eea;
+    margin-bottom: 10px;
+}
+
+.progress-message {
+    color: #6b7280;
+    font-size: 14px;
+}
+
+/* Responsive */
+@media (max-width:1024px) {
+    .main-container {
+        flex-direction: column;
+    }
+
+    .code-panel {
+        width: 100%;
+        height: 300px;
+    }
+
+    .config-grid {
+        grid-template-columns: 1fr;
+    }
+
+}
+
+.btn-download {
+    background: #3b82f6;
+}
+
+.btn-download:hover {
+    background: #2563eb;
+    transform: translateY(-2px);
+}

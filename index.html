@@ -1,0 +1,172 @@
+﻿<!DOCTYPE html>
+<html lang="es">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Editor Blockly - Robot ESP32</title>
+        
+        <!-- Blockly CDN -->
+        <script src="https://unpkg.com/blockly@10.4.3/blockly_compressed.js"></script>
+        <script src="https://unpkg.com/blockly@10.4.3/blocks_compressed.js"></script>
+        <script src="https://unpkg.com/blockly@10.4.3/javascript_compressed.js"></script>
+        <script src="https://unpkg.com/blockly@10.4.3/msg/es.js"></script>
+        <script src="https://unpkg.com/blockly@10.4.3/msg/en.js"></script>
+        
+        
+        <!-- ESPTool.js LOCAL como módulo ES6 -->
+        <script type="module">
+        import { ESPLoader, Transport } from './libs/esptool.bundle.js';
+        // Hacer disponible globalmente
+        window.ESPLoader = ESPLoader;
+        window.Transport = Transport;
+        console.log('✅ ESPLoader cargado como módulo ES6');
+        
+        // Disparar evento para que otros scripts sepan que está listo
+        window.dispatchEvent(new Event('esploader-ready'));
+        </script>
+        
+        <!-- Archivos locales - ORDEN IMPORTANTE -->
+        <link rel="stylesheet" href="styles.css">
+    </head>
+    <body>
+        <body>
+            <div class="header">
+                <div class="header-left">
+                    <h1><span id="title">Editor Blockly - Robot ESP32</span></h1>
+                </div>
+                <div class="header-right">
+                    <select id="languageSelect" class="language-selector" onchange="changeLanguage(this.value)">
+                        <option value="es">Español</option>
+                        <option value="en">English</option>
+                    </select>
+                </div>
+            </div>
+            
+            <div class="toolbar">
+                <button class="btn btn-config" onclick="openConfigModal()">
+                <span class="btn-icon">⚙️</span>
+                <span id="btn_config">Configurar Pines</span>
+                </button>
+                <button class="btn btn-generate" onclick="generateCode()">
+                <span class="btn-icon">✅</span>
+                <span id="btn_generate">Generar Codigo</span>
+                </button>
+                <button class="btn btn-upload" onclick="uploadToRobot()">
+                <span class="btn-icon">📤</span>
+                <span id="btn_upload">Subir al Robot</span>
+                </button>
+                <button class="btn btn-clear" onclick="clearWorkspace()">
+                <span class="btn-icon">🗑️</span>
+                <span id="btn_clear">Limpiar</span>
+                </button>
+                <button class="btn btn-download" onclick="downloadInstaller()">
+                <span class="btn-icon">📥</span>
+                <span id="btn_download">Descargar MiniFlasher</span>
+                </button>
+            </div>
+            
+            <div class="main-container">
+                <div class="blockly-container">
+                    <div id="blocklyDiv"></div>
+                </div>
+                
+                <div class="code-panel">
+                    <div class="code-tabs">
+                        <button class="code-tab active" onclick="switchTab('setup')" id="tab_setup">Setup</button>
+                        <button class="code-tab" onclick="switchTab('loop')" id="tab_loop">Loop</button>
+                        <button class="code-tab" onclick="switchTab('full')" id="tab_full">Código Completo</button>
+                    </div>
+                    <div class="code-content" id="codeOutput">// El codigo aparecera aquí...</div>
+                    <div class="status-bar">
+                        <div class="status-indicator">
+                            <div class="status-dot" id="serverStatus"></div>
+                            <span id="serverStatusText">Verificando servidor...</span>
+                        </div>
+                        <span id="blockCount">0 bloques</span>
+                    </div>
+                </div>
+            </div>
+            <!-- Modal de Configuracion -->
+            <div class="modal" id="configModal">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <span id="modal_title">⚙️ Configuración de Pines</span>
+                        <button class="modal-close" onclick="closeConfigModal()">❌</button>
+                    </div>
+                    
+                    <div class="config-grid">
+                        <div class="config-group">
+                            <label id="label_motor_left_a">Motor Izquierdo - Pin A:</label>
+                        <select id="pin_motor_izq_a"></select>
+                    </div>
+                    <div class="config-group">
+                        <label id="label_motor_left_b">Motor Izquierdo - Pin B:</label>
+                    <select id="pin_motor_izq_b"></select>
+                </div>
+                <div class="config-group">
+                    <label id="label_motor_right_a">Motor Derecho - Pin A:</label>
+                <select id="pin_motor_der_a"></select>
+            </div>
+            <div class="config-group">
+                <label id="label_motor_right_b">Motor Derecho - Pin B:</label>
+            <select id="pin_motor_der_b"></select>
+        </div>
+        <div class="config-group">
+            <label id="label_trig">Ultrasonido - TRIG:</label>
+        <select id="pin_trig"></select>
+    </div>
+    <div class="config-group">
+        <label id="label_echo">Ultrasonido - ECHO:</label>
+    <select id="pin_echo"></select>
+</div>
+<div class="config-group">
+    <label id="label_line_left">Sensor Línea Izq:</label>
+<select id="pin_line_left"></select>
+</div>
+<div class="config-group">
+<label id="label_line_right">Sensor Línea Der:</label>
+<select id="pin_line_right"></select>
+</div>
+<div class="config-group">
+<label id="label_servo">Servo Pin:</label>
+<select id="pin_servo"></select>
+</div>
+</div>
+<div class="modal-footer">
+<button class="btn btn-generate" onclick="saveConfig()">
+<span id="btn_save">✅ Guardar</span>
+</button>
+<button class="btn btn-clear" onclick="closeConfigModal()">
+<span id="btn_cancel">❌Cancelar</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Barra de progreso -->
+<div class="progress-overlay" id="progressOverlay">
+<div class="progress-container">
+<div class="progress-title" id="progressTitle">Compilando...</div>
+<div class="progress-bar">
+<div class="progress-fill" id="progressFill"></div>
+</div>
+<div class="progress-text" id="progressText">0%</div>
+<div class="progress-message" id="progressMessage">Preparando codigo...</div>
+</div>
+</div>
+<!-- Scripts en orden correcto -->
+<script src="config.js"></script>
+<script src="i18n.js"></script>
+<script src="blocks.js"></script>
+<script src="generators.js"></script>
+<script src="webserial.js"></script>
+<script src="app.js"></script>
+<script>
+// Inicializar todo al cargar
+function initEverything() {
+if (typeof loadConfigFromStorage === 'function') {
+loadConfigFromStorage();
+loadLanguageFromStorage();
+}
+}
+</script>
+</body>
