@@ -192,9 +192,9 @@ async function uploadToRobot() {
 
     try {
         // 1. Verificar que miniFlasher esté corriendo
-        updateProgress(10, currentLanguage === 'es' ? 'Verificando servidor local...' : 'Checking local server...');
+        updateProgress(10, currentLanguage === 'es' ? 'Verificando servidor...' : 'Checking server...');
 
-        let miniFlasherUrl = 'http://localhost:5001';
+        let miniFlasherUrl = 'https://github.com/davidjovanny/chanchiblock/releases/download/MiniflasherV1/MiniFlasher_Package.zip';
 
         try {
             const healthCheck = await fetch(`${miniFlasherUrl}/api/health`, {
