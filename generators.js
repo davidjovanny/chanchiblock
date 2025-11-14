@@ -336,6 +336,7 @@ function extractSetup(fullCode) {
 }
 
 function extractLoop(fullCode) {
-    const loopMatch = fullCode.match(/void loop\(\) \{([\s\S]*?)\n\}$/);
+    // CORRECCIÓN: Añadido \s*$ para permitir espacios/saltos de línea al final
+    const loopMatch = fullCode.match(/void loop\(\) \{([\s\S]*?)\n\}\s*$/);
     return loopMatch ? `void loop() {\n${loopMatch[1]}\n}` : '';
 }
