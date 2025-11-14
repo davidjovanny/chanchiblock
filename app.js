@@ -194,8 +194,7 @@ async function uploadToRobot() {
         // 1. Verificar que miniFlasher esté corriendo
         updateProgress(10, currentLanguage === 'es' ? 'Verificando servidor...' : 'Checking server...');
 
-        let miniFlasherUrl = 'https://github.com/davidjovanny/chanchiblock/releases/download/MiniflasherV1/MiniFlasher_Package.zip';
-
+        let miniFlasherUrl = 'http://localhost:5001';
         try {
             const healthCheck = await fetch(`${miniFlasherUrl}/api/health`, {
                 method: 'GET',
@@ -307,14 +306,16 @@ async function checkServerStatus() {
 
 
 function downloadInstaller() {
+    // 1. Texto actualizado para el confirm()
     const confirmDownload = confirm(
         currentLanguage === 'es' ?
-        '📥 Descargar MiniFlasher\n\nEste instalador permite que tu computadora compile y suba código al ESP32.\n\n✅ Solo necesitas instalarlo una vez\n✅ Se ejecuta en segundo plano\n✅ Detecta automáticamente el ESP32\n\n¿Descargar ahora?' :
-        '📥 Download MiniFlasher\n\nThis installer allows your computer to compile and upload code to ESP32.\n\n✅ Install only once\n✅ Runs in background\n✅ Auto-detects ESP32\n\nDownload now?'
+        '📥 Descargar Paquete Chanchiblock (.zip)\n\nNecesitas este paquete para conectar la web con tu ESP32.\n\n✅ Descomprímelo donde quieras\n✅ Ejecuta "START_MiniFlasher.bat" como Administrador\n\n¿Descargar ahora?' :
+        '📥 Download Chanchiblock Package (.zip)\n\nYou need this package to connect the web with your ESP32.\n\n✅ Unzip it anywhere\n✅ Run "START_MiniFlasher.bat" as Administrator\n\nDownload now?'
     );
 
     if (confirmDownload) {
-        window.location.href = `/download-installer`;
+        // 2. Pega tu enlace de GitHub Releases aquí
+        window.location.href = "https://github.com/davidjovanny/chanchiblock/releases/download/MiniflasherV1/MiniFlasher_Package.zip";
     }
 }
 
