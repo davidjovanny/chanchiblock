@@ -135,6 +135,20 @@ Blockly.Blocks['gpio_digital_write'] = {
     }
 };
 
+
+Blockly.Blocks['math_random_int'] = {
+    init: function() {
+        this.appendDummyInput()
+            .appendField(currentLanguage === 'es' ? "🎲 Número aleatorio entre" : "🎲 Random number from")
+            .appendField(new Blockly.FieldNumber(1), 'FROM')
+            .appendField(currentLanguage === 'es' ? "y" : "and")
+            .appendField(new Blockly.FieldNumber(100), 'TO');
+        this.setOutput(true, 'Number');
+        this.setColour(230); // Color de "Math"
+        this.setTooltip(currentLanguage === 'es' ? "Genera un número entero aleatorio" : "Generates a random integer");
+    }
+};
+
 Blockly.Blocks['gpio_digital_read'] = {
     init: function() {
         this.appendDummyInput()
@@ -472,6 +486,9 @@ function getToolbox() {
             }, {
                 "kind": "block",
                 "type": "logic_operation"
+            }, {
+                "kind": "block",
+                "type": "math_random_int" // <-- AÑADE ESTA LÍNEA
             }, {
                 "kind": "block",
                 "type": "logic_boolean"

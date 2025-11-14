@@ -142,6 +142,21 @@ Blockly.JavaScript['millis_timer'] = function(block) {
     return ['millis()', Blockly.JavaScript.ORDER_FUNCTION_CALL];
 };
 
+Blockly.JavaScript.provideFunction_(
+    'randomInt',
+    ['long ' + Blockly.JavaScript.FUNCTION_NAME_PLACEHOLDER_ + '(long min, long max) {',
+        '  if (min > max) { long temp = min; min = max; max = temp; }',
+        '  return random(min, max + 1);',
+        '}'
+    ]);
+
+Blockly.JavaScript['math_random_int'] = function(block) {
+    var from = block.getFieldValue('FROM') || '1';
+    var to = block.getFieldValue('TO') || '100';
+    var functionName = Blockly.JavaScript.provideFunction_('randomInt', /* ...código de arriba... */ );
+    var code = functionName + '(' + from + ', ' + to + ')';
+    return [code, Blockly.JavaScript.ORDER_FUNCTION_CALL];
+};
 // ===== FUNCIÃ“N PRINCIPAL DE GENERACIÃ“N =====
 // ===== FUNCIÃ“N PRINCIPAL DE GENERACIÃ“N (MODIFICADA) =====
 
