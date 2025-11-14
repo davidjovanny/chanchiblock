@@ -379,3 +379,11 @@ function loadExampleProgram() {
         console.log('No se pudo cargar ejemplo inicial');
     }
 }
+
+function openAboutModal() {
+    document.getElementById('aboutModal').classList.add('active');
+}
+
+function closeAboutModal() {
+    document.getElementById('aboutModal').classList.remove('active');
+}

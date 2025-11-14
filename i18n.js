@@ -75,7 +75,17 @@ const translations = {
         cat_serial: "Serial",
         cat_wifi: "WiFi",
         cat_bluetooth: "Bluetooth",
-        cat_logic: "Lógica"
+        cat_logic: "Lógica",
+
+        btn_download: "Descargar Paquete Local",
+        btn_about: "🐷 Sobre Nosotros", // <-- AÑADIDO
+
+        // ...
+        modal_about_title: "🐷 Sobre Chanchiblock", // <-- AÑADIDO
+        modal_about_h2: "¡Hola! Somos David, Claudio, Geny y Kimmi.", // <-- AÑADIDO
+        modal_about_p1: "Hicimos Chanchiblock porque amamos el ESP32, pero estábamos frustrados con las herramientas que existían.", // <-- AÑADIDO
+        modal_about_p2: "Creemos que programar un robot debe ser simple y divertido. Esperamos que esta herramienta te ayude a crear cosas increíbles.", // <-- AÑADIDO
+        modal_about_p3: "¡Que la goces!" // <-- AÑADIDO
     },
     en: {
         // Header
@@ -152,7 +162,16 @@ const translations = {
         cat_serial: "Serial",
         cat_wifi: "WiFi",
         cat_bluetooth: "Bluetooth",
-        cat_logic: "Logic"
+        cat_logic: "Logic",
+        btn_download: "Download Local Package",
+        btn_about: "🐷 About Us", // <-- AÑADIDO
+
+        // ...
+        modal_about_title: "🐷 About Chanchiblock", // <-- AÑADIDO
+        modal_about_h2: "Hi! We're David, Claudio, Geny, and Kimmi.", // <-- AÑADIDO
+        modal_about_p1: "We built Chanchiblock because we love the ESP32, but we were frustrated with the existing tools.", // <-- AÑADIDO
+        modal_about_p2: "We believe programming a robot should be simple and fun. We hope this tool helps you build amazing things.", // <-- AÑADIDO
+        modal_about_p3: "Enjoy it!" // <-- AÑADIDO
     }
 };
 

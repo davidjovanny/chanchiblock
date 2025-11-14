@@ -63,64 +63,69 @@
                 <span class="btn-icon">📥</span>
                 <span id="btn_download">Descargar MiniFlasher</span>
                 </button>
+                <button class="btn btn-about" onclick="openAboutModal()">
+                <span class="btn-icon">🐷</span>
+                <span id="btn_about">Sobre Nosotros</span>
+                </button>
+            </div>
+        </div>
+        
+        <div class="main-container">
+            <div class="blockly-container">
+                <div id="blocklyDiv"></div>
             </div>
             
-            <div class="main-container">
-                <div class="blockly-container">
-                    <div id="blocklyDiv"></div>
+            <div class="code-panel">
+                <div class="code-tabs">
+                    <button class="code-tab active" onclick="switchTab('setup')" id="tab_setup">Setup</button>
+                    <button class="code-tab" onclick="switchTab('loop')" id="tab_loop">Loop</button>
+                    <button class="code-tab" onclick="switchTab('full')" id="tab_full">Código Completo</button>
+                </div>
+                <div class="code-content" id="codeOutput">// El codigo aparecera aquí...</div>
+                <div class="status-bar">
+                    <div class="status-indicator">
+                        <div class="status-dot" id="serverStatus"></div>
+                        <span id="serverStatusText">Verificando servidor...</span>
+                    </div>
+                    <span id="blockCount">0 bloques</span>
+                </div>
+            </div>
+        </div>
+        <!-- Modal de Configuracion -->
+        <div class="modal" id="configModal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <span id="modal_title">⚙️ Configuración de Pines</span>
+                    <button class="modal-close" onclick="closeConfigModal()">❌</button>
                 </div>
                 
-                <div class="code-panel">
-                    <div class="code-tabs">
-                        <button class="code-tab active" onclick="switchTab('setup')" id="tab_setup">Setup</button>
-                        <button class="code-tab" onclick="switchTab('loop')" id="tab_loop">Loop</button>
-                        <button class="code-tab" onclick="switchTab('full')" id="tab_full">Código Completo</button>
-                    </div>
-                    <div class="code-content" id="codeOutput">// El codigo aparecera aquí...</div>
-                    <div class="status-bar">
-                        <div class="status-indicator">
-                            <div class="status-dot" id="serverStatus"></div>
-                            <span id="serverStatusText">Verificando servidor...</span>
-                        </div>
-                        <span id="blockCount">0 bloques</span>
-                    </div>
-                </div>
-            </div>
-            <!-- Modal de Configuracion -->
-            <div class="modal" id="configModal">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <span id="modal_title">⚙️ Configuración de Pines</span>
-                        <button class="modal-close" onclick="closeConfigModal()">❌</button>
-                    </div>
-                    
-                    <div class="config-grid">
-                        <div class="config-group">
-                            <label id="label_motor_left_a">Motor Izquierdo - Pin A:</label>
-                        <select id="pin_motor_izq_a"></select>
-                    </div>
+                <div class="config-grid">
                     <div class="config-group">
-                        <label id="label_motor_left_b">Motor Izquierdo - Pin B:</label>
-                    <select id="pin_motor_izq_b"></select>
+                        <label id="label_motor_left_a">Motor Izquierdo - Pin A:</label>
+                    <select id="pin_motor_izq_a"></select>
                 </div>
                 <div class="config-group">
-                    <label id="label_motor_right_a">Motor Derecho - Pin A:</label>
-                <select id="pin_motor_der_a"></select>
+                    <label id="label_motor_left_b">Motor Izquierdo - Pin B:</label>
+                <select id="pin_motor_izq_b"></select>
             </div>
             <div class="config-group">
-                <label id="label_motor_right_b">Motor Derecho - Pin B:</label>
-            <select id="pin_motor_der_b"></select>
+                <label id="label_motor_right_a">Motor Derecho - Pin A:</label>
+            <select id="pin_motor_der_a"></select>
         </div>
         <div class="config-group">
-            <label id="label_trig">Ultrasonido - TRIG:</label>
-        <select id="pin_trig"></select>
+            <label id="label_motor_right_b">Motor Derecho - Pin B:</label>
+        <select id="pin_motor_der_b"></select>
     </div>
     <div class="config-group">
-        <label id="label_echo">Ultrasonido - ECHO:</label>
-    <select id="pin_echo"></select>
+        <label id="label_trig">Ultrasonido - TRIG:</label>
+    <select id="pin_trig"></select>
 </div>
 <div class="config-group">
-    <label id="label_line_left">Sensor Línea Izq:</label>
+    <label id="label_echo">Ultrasonido - ECHO:</label>
+<select id="pin_echo"></select>
+</div>
+<div class="config-group">
+<label id="label_line_left">Sensor Línea Izq:</label>
 <select id="pin_line_left"></select>
 </div>
 <div class="config-group">
@@ -151,6 +156,27 @@
 </div>
 <div class="progress-text" id="progressText">0%</div>
 <div class="progress-message" id="progressMessage">Preparando codigo...</div>
+</div>
+</div>
+<div class="modal" id="aboutModal">
+<div class="modal-content">
+<div class="modal-header">
+<span id="modal_about_title">🐷 Sobre Chanchiblock</span>
+<button class="modal-close" onclick="closeAboutModal()">❌</button>
+</div>
+
+<div class="about-content">
+<h2 id="modal_about_h2">¡Hola! Somos David, Claudio, Geny y Kimmi.</h2>
+<p id="modal_about_p1">
+Hicimos Chanchiblock porque amamos el ESP32, pero estábamos frustrados con las herramientas que existían.
+</p>
+<p id="modal_about_p2">
+Creemos que programar un robot debe ser simple y divertido. Esperamos que esta herramienta te ayude a crear cosas increíbles.
+</p>
+<p id="modal_about_p3">
+¡Que la goces!
+</p>
+</div>
 </div>
 </div>
 <!-- Scripts en orden correcto -->

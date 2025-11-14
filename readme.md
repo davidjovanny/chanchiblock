@@ -134,3 +134,12 @@ Get started in 2 simple steps:
 
 This project is open-source and available under the \[MIT License](LICENSE).
 
+
+## 🐷 About the Chanchiblock Team
+
+Chanchiblock was born out of frustration. We're a group of friends—**David, Claudio, Geny, and Kimmi**—who love making robots with the ESP32 but were tired of the existing block editors being buggy, complicated, or just... frustrating.
+
+We believe that programming an ESP32 should be powerful, simple, and fun.
+
+So, we built our own tool. We hope it saves you some time and helps you build awesome projects. Enjoy it! (¡Que la gocen!)
+

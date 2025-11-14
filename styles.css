@@ -471,3 +471,30 @@ body {
     background: #2563eb;
     transform: translateY(-2px);
 }
+
+/* Estilo para el nuevo botón "About" */
+.btn-about {
+    background: #3b82f6; /* El mismo azul del botón de descarga */
+}
+
+.btn-about:hover {
+    background: #2563eb;
+    transform: translateY(-2px);
+}
+
+/* Estilo para el contenido del modal "About" */
+.about-content {
+    padding: 30px;
+    line-height: 1.6;
+    color: #374151;
+}
+
+.about-content h2 {
+    font-size: 20px;
+    font-weight: 600;
+    margin-bottom: 20px;
+}
+
+.about-content p {
+    margin-bottom: 15px;
+}
