@@ -284,7 +284,7 @@ function clearWorkspace() {
 
 async function checkServerStatus() {
     try {
-        const r = await fetch(`/api/health`, {
+        const r = await fetch(`http://localhost:5001/api/health`, {
             timeout: 3000
         });
         if (r.ok) {
