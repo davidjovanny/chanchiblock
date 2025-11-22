@@ -96,6 +96,24 @@ body {
     background: #dc2626;
 }
 
+.btn-save {
+    background: #06b6d4;
+}
+
+.btn-save:hover {
+    background: #0891b2;
+    transform: translateY(-2px);
+}
+
+.btn-load {
+    background: #d946ef;
+}
+
+.btn-load:hover {
+    background: #c026d3;
+    transform: translateY(-2px);
+}
+
 .main-container {
     display: flex;
     height: calc(100vh - 140px);
