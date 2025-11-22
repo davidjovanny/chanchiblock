@@ -2,40 +2,44 @@
 
 // ===== GENERADORES DE MOVIMIENTO =====
 
-Blockly.JavaScript['robot_forward'] = function(block) {
-    return 'avanzar();\n';
+Blockly.JavaScript['robot_forward'] = function (block) {
+    const speed = Blockly.JavaScript.valueToCode(block, 'SPEED', Blockly.JavaScript.ORDER_ATOMIC) || '255';
+    return `avanzar(${speed});\n`;
 };
 
-Blockly.JavaScript['robot_backward'] = function(block) {
-    return 'retroceder();\n';
+Blockly.JavaScript['robot_backward'] = function (block) {
+    const speed = Blockly.JavaScript.valueToCode(block, 'SPEED', Blockly.JavaScript.ORDER_ATOMIC) || '255';
+    return `retroceder(${speed});\n`;
 };
 
-Blockly.JavaScript['robot_turn_left'] = function(block) {
-    return 'girarIzquierda();\n';
+Blockly.JavaScript['robot_turn_left'] = function (block) {
+    const speed = Blockly.JavaScript.valueToCode(block, 'SPEED', Blockly.JavaScript.ORDER_ATOMIC) || '255';
+    return `girarIzquierda(${speed});\n`;
 };
 
-Blockly.JavaScript['robot_turn_right'] = function(block) {
-    return 'girarDerecha();\n';
+Blockly.JavaScript['robot_turn_right'] = function (block) {
+    const speed = Blockly.JavaScript.valueToCode(block, 'SPEED', Blockly.JavaScript.ORDER_ATOMIC) || '255';
+    return `girarDerecha(${speed});\n`;
 };
 
-Blockly.JavaScript['robot_stop'] = function(block) {
+Blockly.JavaScript['robot_stop'] = function (block) {
     return 'detener();\n';
 };
 
 // ===== GENERADOR DE DELAY =====
 
-Blockly.JavaScript['robot_delay'] = function(block) {
+Blockly.JavaScript['robot_delay'] = function (block) {
     const time = block.getFieldValue('TIME');
     return `delay(${time});\n`;
 };
 
 // ===== GENERADORES DE SENSORES =====
 
-Blockly.JavaScript['robot_read_distance'] = function(block) {
+Blockly.JavaScript['robot_read_distance'] = function (block) {
     return ['leerDistancia()', Blockly.JavaScript.ORDER_FUNCTION_CALL];
 };
 
-Blockly.JavaScript['robot_if_distance'] = function(block) {
+Blockly.JavaScript['robot_if_distance'] = function (block) {
     const distance = block.getFieldValue('DISTANCE');
     const statements = Blockly.JavaScript.statementToCode(block, 'DO');
     return `long distancia = leerDistancia();\nif (distancia < ${distance}) {\n${statements}}\n`;
@@ -43,36 +47,36 @@ Blockly.JavaScript['robot_if_distance'] = function(block) {
 
 // ===== GENERADOR DE SERVO =====
 
-Blockly.JavaScript['robot_servo'] = function(block) {
+Blockly.JavaScript['robot_servo'] = function (block) {
     const angle = block.getFieldValue('ANGLE');
     return `servo1.write(${angle});\n`;
 };
 
 // ===== GENERADORES GPIO =====
 
-Blockly.JavaScript['gpio_pin_mode'] = function(block) {
+Blockly.JavaScript['gpio_pin_mode'] = function (block) {
     const pin = block.getFieldValue('PIN');
     const mode = block.getFieldValue('MODE');
     return `pinMode(${pin}, ${mode});\n`;
 };
 
-Blockly.JavaScript['gpio_digital_write'] = function(block) {
+Blockly.JavaScript['gpio_digital_write'] = function (block) {
     const pin = block.getFieldValue('PIN');
     const state = block.getFieldValue('STATE');
     return `digitalWrite(${pin}, ${state});\n`;
 };
 
-Blockly.JavaScript['gpio_digital_read'] = function(block) {
+Blockly.JavaScript['gpio_digital_read'] = function (block) {
     const pin = block.getFieldValue('PIN');
     return [`digitalRead(${pin})`, Blockly.JavaScript.ORDER_FUNCTION_CALL];
 };
 
-Blockly.JavaScript['gpio_analog_read'] = function(block) {
+Blockly.JavaScript['gpio_analog_read'] = function (block) {
     const pin = block.getFieldValue('PIN');
     return [`analogRead(${pin})`, Blockly.JavaScript.ORDER_FUNCTION_CALL];
 };
 
-Blockly.JavaScript['gpio_analog_write'] = function(block) {
+Blockly.JavaScript['gpio_analog_write'] = function (block) {
     const pin = block.getFieldValue('PIN');
     const value = Blockly.JavaScript.valueToCode(block, 'VALUE', Blockly.JavaScript.ORDER_ATOMIC) || '0';
     return `analogWrite(${pin}, ${value});\n`;
@@ -80,19 +84,19 @@ Blockly.JavaScript['gpio_analog_write'] = function(block) {
 
 // ===== GENERADORES SERIAL =====
 
-Blockly.JavaScript['serial_begin'] = function(block) {
+Blockly.JavaScript['serial_begin'] = function (block) {
     const baud = block.getFieldValue('BAUD');
     return `Serial.begin(${baud});\n`;
 };
 
-Blockly.JavaScript['serial_print'] = function(block) {
+Blockly.JavaScript['serial_print'] = function (block) {
     const text = Blockly.JavaScript.valueToCode(block, 'TEXT', Blockly.JavaScript.ORDER_ATOMIC) || '""';
     return `Serial.println(${text});\n`;
 };
 
 // ===== GENERADORES WIFI =====
 
-Blockly.JavaScript['wifi_connect'] = function(block) {
+Blockly.JavaScript['wifi_connect'] = function (block) {
     const ssid = block.getFieldValue('SSID');
     const pass = block.getFieldValue('PASS');
     return `WiFi.begin("${ssid}", "${pass}");\nwhile (WiFi.status() != WL_CONNECTED) {\n  delay(500);\n  Serial.print(".");\n}\nSerial.println("\\nWiFi conectado!");\nSerial.print("IP: ");\nSerial.println(WiFi.localIP());\n`;
@@ -100,45 +104,45 @@ Blockly.JavaScript['wifi_connect'] = function(block) {
 
 // ===== GENERADORES BLUETOOTH =====
 
-Blockly.JavaScript['bt_begin'] = function(block) {
+Blockly.JavaScript['bt_begin'] = function (block) {
     const name = block.getFieldValue('NAME');
     return `SerialBT.begin("${name}");\nSerial.println("Bluetooth iniciado: ${name}");\n`;
 };
 
-Blockly.JavaScript['bt_print'] = function(block) {
+Blockly.JavaScript['bt_print'] = function (block) {
     const text = Blockly.JavaScript.valueToCode(block, 'TEXT', Blockly.JavaScript.ORDER_ATOMIC) || '""';
     return `SerialBT.println(${text});\n`;
 };
 
 // ===== GENERADOR LED INTERNO =====
 
-Blockly.JavaScript['test_builtin_led'] = function(block) {
+Blockly.JavaScript['test_builtin_led'] = function (block) {
     return `digitalWrite(${ESP32_BUILTIN_LED}, HIGH);\ndelay(500);\ndigitalWrite(${ESP32_BUILTIN_LED}, LOW);\ndelay(500);\n`;
 };
 
 // ===== GENERADORES DE VARIABLES =====
 
-Blockly.JavaScript['create_variable'] = function(block) {
+Blockly.JavaScript['create_variable'] = function (block) {
     const varName = block.getFieldValue('VAR_NAME');
     const varType = block.getFieldValue('VAR_TYPE');
     const value = Blockly.JavaScript.valueToCode(block, 'VALUE', Blockly.JavaScript.ORDER_ATOMIC) || '0';
     return `${varType} ${varName} = ${value};\n`;
 };
 
-Blockly.JavaScript['set_variable'] = function(block) {
+Blockly.JavaScript['set_variable'] = function (block) {
     const varName = block.getFieldValue('VAR_NAME');
     const value = Blockly.JavaScript.valueToCode(block, 'VALUE', Blockly.JavaScript.ORDER_ATOMIC) || '0';
     return `${varName} = ${value};\n`;
 };
 
-Blockly.JavaScript['get_variable'] = function(block) {
+Blockly.JavaScript['get_variable'] = function (block) {
     const varName = block.getFieldValue('VAR_NAME');
     return [varName, Blockly.JavaScript.ORDER_ATOMIC];
 };
 
 // ===== GENERADOR TIMER =====
 
-Blockly.JavaScript['millis_timer'] = function(block) {
+Blockly.JavaScript['millis_timer'] = function (block) {
     return ['millis()', Blockly.JavaScript.ORDER_FUNCTION_CALL];
 };
 
@@ -150,10 +154,10 @@ Blockly.JavaScript.provideFunction_(
         '}'
     ]);
 
-Blockly.JavaScript['math_random_int'] = function(block) {
+Blockly.JavaScript['math_random_int'] = function (block) {
     var from = block.getFieldValue('FROM') || '1';
     var to = block.getFieldValue('TO') || '100';
-    var functionName = Blockly.JavaScript.provideFunction_('randomInt', /* ...código de arriba... */ );
+    var functionName = Blockly.JavaScript.provideFunction_('randomInt', /* ...código de arriba... */);
     var code = functionName + '(' + from + ', ' + to + ')';
     return [code, Blockly.JavaScript.ORDER_FUNCTION_CALL];
 };
@@ -236,11 +240,11 @@ function generateFullCode() {
         code += `// === FUNCIONES AUXILIARES ===\n`;
     }
     if (usesMovement) {
-        code += `void avanzar() {\n  digitalWrite(MOTOR_IZQ_A, HIGH);\n  digitalWrite(MOTOR_IZQ_B, LOW);\n  digitalWrite(MOTOR_DER_A, HIGH);\n  digitalWrite(MOTOR_DER_B, LOW);\n}\n\n`;
-        code += `void retroceder() {\n  digitalWrite(MOTOR_IZQ_A, LOW);\n  digitalWrite(MOTOR_IZQ_B, HIGH);\n  digitalWrite(MOTOR_DER_A, LOW);\n  digitalWrite(MOTOR_DER_B, HIGH);\n}\n\n`;
-        code += `void girarIzquierda() {\n  digitalWrite(MOTOR_IZQ_A, LOW);\n  digitalWrite(MOTOR_IZQ_B, HIGH);\n  digitalWrite(MOTOR_DER_A, HIGH);\n  digitalWrite(MOTOR_DER_B, LOW);\n}\n\n`;
-        code += `void girarDerecha() {\n  digitalWrite(MOTOR_IZQ_A, HIGH);\n  digitalWrite(MOTOR_IZQ_B, LOW);\n  digitalWrite(MOTOR_DER_A, LOW);\n  digitalWrite(MOTOR_DER_B, HIGH);\n}\n\n`;
-        code += `void detener() {\n  digitalWrite(MOTOR_IZQ_A, LOW);\n  digitalWrite(MOTOR_IZQ_B, LOW);\n  digitalWrite(MOTOR_DER_A, LOW);\n  digitalWrite(MOTOR_DER_B, LOW);\n}\n\n`;
+        code += `void avanzar(int velocidad) {\n  analogWrite(MOTOR_IZQ_A, velocidad);\n  analogWrite(MOTOR_IZQ_B, 0);\n  analogWrite(MOTOR_DER_A, velocidad);\n  analogWrite(MOTOR_DER_B, 0);\n}\n\n`;
+        code += `void retroceder(int velocidad) {\n  analogWrite(MOTOR_IZQ_A, 0);\n  analogWrite(MOTOR_IZQ_B, velocidad);\n  analogWrite(MOTOR_DER_A, 0);\n  analogWrite(MOTOR_DER_B, velocidad);\n}\n\n`;
+        code += `void girarIzquierda(int velocidad) {\n  analogWrite(MOTOR_IZQ_A, 0);\n  analogWrite(MOTOR_IZQ_B, velocidad);\n  analogWrite(MOTOR_DER_A, velocidad);\n  analogWrite(MOTOR_DER_B, 0);\n}\n\n`;
+        code += `void girarDerecha(int velocidad) {\n  analogWrite(MOTOR_IZQ_A, velocidad);\n  analogWrite(MOTOR_IZQ_B, 0);\n  analogWrite(MOTOR_DER_A, 0);\n  analogWrite(MOTOR_DER_B, velocidad);\n}\n\n`;
+        code += `void detener() {\n  analogWrite(MOTOR_IZQ_A, 0);\n  analogWrite(MOTOR_IZQ_B, 0);\n  analogWrite(MOTOR_DER_A, 0);\n  analogWrite(MOTOR_DER_B, 0);\n}\n\n`;
     }
     if (usesDistance) {
         code += `long leerDistancia() {\n  digitalWrite(TRIG_PIN, LOW);\n  delayMicroseconds(2);\n  digitalWrite(TRIG_PIN, HIGH);\n  delayMicroseconds(10);\n  digitalWrite(TRIG_PIN, LOW);\n  long duracion = pulseIn(ECHO_PIN, HIGH, 30000);\n  if (duracion == 0) return 999;\n  return duracion * 0.034 / 2;\n}\n\n`;

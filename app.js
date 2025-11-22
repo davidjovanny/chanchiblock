@@ -7,10 +7,11 @@ let generatedCode = {
     setup: '',
     loop: ''
 };
+let socket = null;
 
 // ===== INICIALIZACIÓN =====
 
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
     // Cargar configuración
     if (typeof loadConfigFromStorage === 'function') {
         loadConfigFromStorage();
@@ -31,7 +32,44 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Verificar soporte de Web Serial API
     checkWebSerialSupport();
+    // Verificar soporte de Web Serial API
+    checkWebSerialSupport();
+
+    // Inicializar Socket.io para Serial Monitor
+    initSerialSocket();
 });
+
+function initSerialSocket() {
+    try {
+        socket = io('http://localhost:5001');
+
+        socket.on('connect', () => {
+            console.log('Socket.io conectado');
+            appendSerialLog('🔌 Conectado al servidor Serial');
+        });
+
+        socket.on('serial_data', (data) => {
+            // data puede ser objeto { data: "..." } o string
+            const msg = data.data || data;
+            appendSerialLog(msg);
+        });
+
+        socket.on('disconnect', () => {
+            console.log('Socket.io desconectado');
+            appendSerialLog('❌ Desconectado del servidor Serial');
+        });
+    } catch (e) {
+        console.error('Error al iniciar Socket.io:', e);
+    }
+}
+
+function appendSerialLog(msg) {
+    const output = document.getElementById('serialOutput');
+    const line = document.createElement('div');
+    line.textContent = msg;
+    output.appendChild(line);
+    output.scrollTop = output.scrollHeight;
+}
 
 function checkWebSerialSupport() {
     if (!('serial' in navigator)) {
@@ -66,7 +104,7 @@ function initWorkspace() {
         trashcan: true
     });
 
-    workspace.addChangeListener(function() {
+    workspace.addChangeListener(function () {
         const count = workspace.getAllBlocks(false).length;
         document.getElementById('blockCount').textContent = `${count} ${t('blocks_count')}`;
     });
@@ -156,6 +194,15 @@ function displayCode() {
         default:
             output.textContent = generatedCode.full || '// El código aparecerá aquí...';
     }
+
+    // Manejar visibilidad de paneles
+    if (currentTab === 'serial') {
+        document.getElementById('codeOutput').style.display = 'none';
+        document.getElementById('serialOutput').style.display = 'block';
+    } else {
+        document.getElementById('codeOutput').style.display = 'block';
+        document.getElementById('serialOutput').style.display = 'none';
+    }
 }
 
 // ===== BARRA DE PROGRESO =====
@@ -227,6 +274,8 @@ async function uploadToRobot() {
         // 2. Enviar código para compilar y flashear
         updateProgress(30, currentLanguage === 'es' ? 'Compilando código...' : 'Compiling code...');
 
+        console.log('📤 Sending code to MiniFlasher:', code.substring(0, 100) + '...');
+
         const flashResponse = await fetch(`${miniFlasherUrl}/api/flash`, {
             method: 'POST',
             headers: {
@@ -267,6 +316,43 @@ async function uploadToRobot() {
 }
 
 
+
+// ===== GUARDAR Y CARGAR PROYECTOS =====
+
+function saveProject() {
+    const xml = Blockly.Xml.workspaceToDom(workspace);
+    const xmlText = Blockly.Xml.domToPrettyText(xml);
+    const blob = new Blob([xmlText], { type: 'text/xml' });
+    const a = document.createElement('a');
+    a.download = 'proyecto_robot.xml';
+    a.href = URL.createObjectURL(blob);
+    a.click();
+}
+
+function loadProject() {
+    document.getElementById('loadInput').click();
+}
+
+function loadProjectFile(input) {
+    const file = input.files[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = function (e) {
+        const xmlText = e.target.result;
+        try {
+            workspace.clear();
+            const xml = Blockly.Xml.textToDom(xmlText);
+            Blockly.Xml.domToWorkspace(xml, workspace);
+            alert(t('alert_load_success') || 'Proyecto cargado exitosamente');
+        } catch (e) {
+            console.error(e);
+            alert('Error al cargar el archivo XML');
+        }
+    };
+    reader.readAsText(file);
+    input.value = ''; // Reset input
+}
 
 // ===== OTRAS FUNCIONES =====
 
@@ -309,8 +395,8 @@ function downloadInstaller() {
     // 1. Texto actualizado para el confirm()
     const confirmDownload = confirm(
         currentLanguage === 'es' ?
-        '📥 Descargar Paquete Chanchiblock (.zip)\n\nNecesitas este paquete para conectar la web con tu ESP32.\n\n✅ Descomprímelo donde quieras\n✅ Ejecuta "START_MiniFlasher.bat" como Administrador\n\n¿Descargar ahora?' :
-        '📥 Download Chanchiblock Package (.zip)\n\nYou need this package to connect the web with your ESP32.\n\n✅ Unzip it anywhere\n✅ Run "START_MiniFlasher.bat" as Administrator\n\nDownload now?'
+            '📥 Descargar Paquete Chanchiblock (.zip)\n\nNecesitas este paquete para conectar la web con tu ESP32.\n\n✅ Descomprímelo donde quieras\n✅ Ejecuta "START_MiniFlasher.bat" como Administrador\n\n¿Descargar ahora?' :
+            '📥 Download Chanchiblock Package (.zip)\n\nYou need this package to connect the web with your ESP32.\n\n✅ Unzip it anywhere\n✅ Run "START_MiniFlasher.bat" as Administrator\n\nDownload now?'
     );
 
     if (confirmDownload) {

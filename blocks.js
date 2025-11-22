@@ -3,18 +3,24 @@
 // ===== BLOQUES DE MOVIMIENTO =====
 
 Blockly.Blocks['robot_forward'] = {
-    init: function() {
+    init: function () {
         this.appendDummyInput().appendField("⬆️ " + (currentLanguage === 'es' ? "Avanzar" : "Forward"));
+        this.appendValueInput("SPEED")
+            .setCheck("Number")
+            .appendField(currentLanguage === 'es' ? "velocidad" : "speed");
         this.setPreviousStatement(true, null);
         this.setNextStatement(true, null);
         this.setColour(260);
-        this.setTooltip("El robot avanza hacia adelante");
+        this.setTooltip("El robot avanza hacia adelante con velocidad (0-255)");
     }
 };
 
 Blockly.Blocks['robot_backward'] = {
-    init: function() {
+    init: function () {
         this.appendDummyInput().appendField("⬇️ " + (currentLanguage === 'es' ? "Retroceder" : "Backward"));
+        this.appendValueInput("SPEED")
+            .setCheck("Number")
+            .appendField(currentLanguage === 'es' ? "velocidad" : "speed");
         this.setPreviousStatement(true, null);
         this.setNextStatement(true, null);
         this.setColour(260);
@@ -22,8 +28,11 @@ Blockly.Blocks['robot_backward'] = {
 };
 
 Blockly.Blocks['robot_turn_left'] = {
-    init: function() {
+    init: function () {
         this.appendDummyInput().appendField("⬅️ " + (currentLanguage === 'es' ? "Girar Izquierda" : "Turn Left"));
+        this.appendValueInput("SPEED")
+            .setCheck("Number")
+            .appendField(currentLanguage === 'es' ? "velocidad" : "speed");
         this.setPreviousStatement(true, null);
         this.setNextStatement(true, null);
         this.setColour(260);
@@ -31,8 +40,11 @@ Blockly.Blocks['robot_turn_left'] = {
 };
 
 Blockly.Blocks['robot_turn_right'] = {
-    init: function() {
+    init: function () {
         this.appendDummyInput().appendField("➡️ " + (currentLanguage === 'es' ? "Girar Derecha" : "Turn Right"));
+        this.appendValueInput("SPEED")
+            .setCheck("Number")
+            .appendField(currentLanguage === 'es' ? "velocidad" : "speed");
         this.setPreviousStatement(true, null);
         this.setNextStatement(true, null);
         this.setColour(260);
@@ -40,7 +52,7 @@ Blockly.Blocks['robot_turn_right'] = {
 };
 
 Blockly.Blocks['robot_stop'] = {
-    init: function() {
+    init: function () {
         this.appendDummyInput().appendField("⛔ " + (currentLanguage === 'es' ? "Detener" : "Stop"));
         this.setPreviousStatement(true, null);
         this.setNextStatement(true, null);
@@ -51,7 +63,7 @@ Blockly.Blocks['robot_stop'] = {
 // ===== BLOQUE DE DELAY =====
 
 Blockly.Blocks['robot_delay'] = {
-    init: function() {
+    init: function () {
         this.appendDummyInput()
             .appendField("⏱️ " + (currentLanguage === 'es' ? "Esperar" : "Wait"))
             .appendField(new Blockly.FieldNumber(1000, 0, 10000), "TIME")
@@ -65,7 +77,7 @@ Blockly.Blocks['robot_delay'] = {
 // ===== BLOQUES DE SENSORES =====
 
 Blockly.Blocks['robot_read_distance'] = {
-    init: function() {
+    init: function () {
         this.appendDummyInput().appendField("📏 " + (currentLanguage === 'es' ? "Distancia (cm)" : "Distance (cm)"));
         this.setOutput(true, "Number");
         this.setColour(160);
@@ -73,7 +85,7 @@ Blockly.Blocks['robot_read_distance'] = {
 };
 
 Blockly.Blocks['robot_if_distance'] = {
-    init: function() {
+    init: function () {
         this.appendDummyInput()
             .appendField("❓ " + (currentLanguage === 'es' ? "Si distancia <" : "If distance <"))
             .appendField(new Blockly.FieldNumber(20, 0, 400), "DISTANCE")
@@ -89,7 +101,7 @@ Blockly.Blocks['robot_if_distance'] = {
 // ===== BLOQUE DE SERVO =====
 
 Blockly.Blocks['robot_servo'] = {
-    init: function() {
+    init: function () {
         this.appendDummyInput()
             .appendField("🔄 " + (currentLanguage === 'es' ? "Servo a" : "Servo to"))
             .appendField(new Blockly.FieldAngle(90), "ANGLE")
@@ -103,7 +115,7 @@ Blockly.Blocks['robot_servo'] = {
 // ===== BLOQUES GPIO =====
 
 Blockly.Blocks['gpio_pin_mode'] = {
-    init: function() {
+    init: function () {
         this.appendDummyInput()
             .appendField("📌 " + (currentLanguage === 'es' ? "Configurar GPIO" : "Configure GPIO"))
             .appendField(new Blockly.FieldDropdown(ESP32_PINS.map(p => [`GPIO ${p}`, p.toString()])), "PIN")
@@ -120,7 +132,7 @@ Blockly.Blocks['gpio_pin_mode'] = {
 };
 
 Blockly.Blocks['gpio_digital_write'] = {
-    init: function() {
+    init: function () {
         this.appendDummyInput()
             .appendField("📌 " + (currentLanguage === 'es' ? "Escribir GPIO" : "Write GPIO"))
             .appendField(new Blockly.FieldDropdown(ESP32_PINS.map(p => [`GPIO ${p}`, p.toString()])), "PIN")
@@ -137,7 +149,7 @@ Blockly.Blocks['gpio_digital_write'] = {
 
 
 Blockly.Blocks['math_random_int'] = {
-    init: function() {
+    init: function () {
         this.appendDummyInput()
             .appendField(currentLanguage === 'es' ? "🎲 Número aleatorio entre" : "🎲 Random number from")
             .appendField(new Blockly.FieldNumber(1), 'FROM')
@@ -150,7 +162,7 @@ Blockly.Blocks['math_random_int'] = {
 };
 
 Blockly.Blocks['gpio_digital_read'] = {
-    init: function() {
+    init: function () {
         this.appendDummyInput()
             .appendField("📌 " + (currentLanguage === 'es' ? "Leer GPIO" : "Read GPIO"))
             .appendField(new Blockly.FieldDropdown(ESP32_PINS.map(p => [`GPIO ${p}`, p.toString()])), "PIN");
@@ -160,7 +172,7 @@ Blockly.Blocks['gpio_digital_read'] = {
 };
 
 Blockly.Blocks['gpio_analog_read'] = {
-    init: function() {
+    init: function () {
         this.appendDummyInput()
             .appendField("📊 " + (currentLanguage === 'es' ? "Leer Analógico" : "Read Analog"))
             .appendField(new Blockly.FieldDropdown(
@@ -172,7 +184,7 @@ Blockly.Blocks['gpio_analog_read'] = {
 };
 
 Blockly.Blocks['gpio_analog_write'] = {
-    init: function() {
+    init: function () {
         this.appendValueInput("VALUE")
             .setCheck("Number")
             .appendField("📌 PWM GPIO")
@@ -187,7 +199,7 @@ Blockly.Blocks['gpio_analog_write'] = {
 // ===== BLOQUES DE ESTRUCTURA (SETUP/LOOP) =====
 
 Blockly.Blocks['robot_setup'] = {
-    init: function() {
+    init: function () {
         this.appendDummyInput()
             .appendField("🚀 " + (currentLanguage === 'es' ? "Al Iniciar (Setup)" : "On Start (Setup)"));
         this.setNextStatement(true, null);
@@ -197,7 +209,7 @@ Blockly.Blocks['robot_setup'] = {
 };
 
 Blockly.Blocks['robot_loop'] = {
-    init: function() {
+    init: function () {
         this.appendDummyInput()
             .appendField("🔄 " + (currentLanguage === 'es' ? "Repetir Siempre (Loop)" : "Repeat Forever (Loop)"));
         this.setNextStatement(true, null);
@@ -209,7 +221,7 @@ Blockly.Blocks['robot_loop'] = {
 // ===== BLOQUES SERIAL =====
 
 Blockly.Blocks['serial_begin'] = {
-    init: function() {
+    init: function () {
         this.appendDummyInput()
             .appendField("📡 " + (currentLanguage === 'es' ? "Iniciar Serial a" : "Start Serial at"))
             .appendField(new Blockly.FieldDropdown([
@@ -225,7 +237,7 @@ Blockly.Blocks['serial_begin'] = {
 };
 
 Blockly.Blocks['serial_print'] = {
-    init: function() {
+    init: function () {
         this.appendValueInput("TEXT")
             .appendField("📤 " + (currentLanguage === 'es' ? "Enviar por Serial" : "Send via Serial"));
         this.setPreviousStatement(true, null);
@@ -237,7 +249,7 @@ Blockly.Blocks['serial_print'] = {
 // ===== BLOQUES WIFI =====
 
 Blockly.Blocks['wifi_connect'] = {
-    init: function() {
+    init: function () {
         this.appendDummyInput()
             .appendField("📶 " + (currentLanguage === 'es' ? "Conectar WiFi" : "Connect WiFi"));
         this.appendDummyInput()
@@ -255,7 +267,7 @@ Blockly.Blocks['wifi_connect'] = {
 // ===== BLOQUES BLUETOOTH =====
 
 Blockly.Blocks['bt_begin'] = {
-    init: function() {
+    init: function () {
         this.appendDummyInput()
             .appendField("📲 " + (currentLanguage === 'es' ? "Iniciar Bluetooth" : "Start Bluetooth"))
             .appendField(new Blockly.FieldTextInput("ESP32_Robot"), "NAME");
@@ -266,7 +278,7 @@ Blockly.Blocks['bt_begin'] = {
 };
 
 Blockly.Blocks['bt_print'] = {
-    init: function() {
+    init: function () {
         this.appendValueInput("TEXT")
             .appendField("📤 " + (currentLanguage === 'es' ? "Enviar por Bluetooth" : "Send via Bluetooth"));
         this.setPreviousStatement(true, null);
@@ -278,7 +290,7 @@ Blockly.Blocks['bt_print'] = {
 // ===== BLOQUE TEST LED INTERNO =====
 
 Blockly.Blocks['test_builtin_led'] = {
-    init: function() {
+    init: function () {
         this.appendDummyInput()
             .appendField("💡 " + (currentLanguage === 'es' ? "Parpadear LED interno" : "Blink built-in LED"));
         this.setPreviousStatement(true, null);
@@ -290,7 +302,7 @@ Blockly.Blocks['test_builtin_led'] = {
 // ===== BLOQUES DE VARIABLES =====
 
 Blockly.Blocks['create_variable'] = {
-    init: function() {
+    init: function () {
         this.appendValueInput("VALUE")
             .setCheck("Number")
             .appendField("🔢 " + (currentLanguage === 'es' ? "Crear variable" : "Create variable"))
@@ -309,7 +321,7 @@ Blockly.Blocks['create_variable'] = {
 };
 
 Blockly.Blocks['set_variable'] = {
-    init: function() {
+    init: function () {
         this.appendValueInput("VALUE")
             .appendField("🔢 " + (currentLanguage === 'es' ? "Asignar a" : "Set"))
             .appendField(new Blockly.FieldTextInput("miVariable"), "VAR_NAME")
@@ -321,7 +333,7 @@ Blockly.Blocks['set_variable'] = {
 };
 
 Blockly.Blocks['get_variable'] = {
-    init: function() {
+    init: function () {
         this.appendDummyInput()
             .appendField("🔢")
             .appendField(new Blockly.FieldTextInput("miVariable"), "VAR_NAME");
@@ -333,7 +345,7 @@ Blockly.Blocks['get_variable'] = {
 // ===== BLOQUE TIMER (millis) =====
 
 Blockly.Blocks['millis_timer'] = {
-    init: function() {
+    init: function () {
         this.appendDummyInput()
             .appendField("⏱️ " + (currentLanguage === 'es' ? "Temporizador (ms)" : "Timer (ms)"));
         this.setOutput(true, "Number");
