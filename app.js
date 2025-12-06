@@ -11,7 +11,7 @@ let socket = null;
 
 // ===== INICIALIZACIÓN =====
 
-document.addEventListener('DOMContentLoaded', function () {
+document.addEventListener('DOMContentLoaded', function() {
     // Cargar configuración
     if (typeof loadConfigFromStorage === 'function') {
         loadConfigFromStorage();
@@ -63,6 +63,24 @@ function initSerialSocket() {
     }
 }
 
+function sendSerial() {
+    const input = document.getElementById('serialInput');
+    const msg = input.value;
+    if (msg && socket) {
+        socket.emit('serial_write', {
+            data: msg
+        });
+        appendSerialLog(`> ${msg}`); // Echo local
+        input.value = '';
+    }
+}
+
+function handleSerialKeyPress(event) {
+    if (event.key === 'Enter') {
+        sendSerial();
+    }
+}
+
 function appendSerialLog(msg) {
     const output = document.getElementById('serialOutput');
     const line = document.createElement('div');
@@ -104,7 +122,7 @@ function initWorkspace() {
         trashcan: true
     });
 
-    workspace.addChangeListener(function () {
+    workspace.addChangeListener(function() {
         const count = workspace.getAllBlocks(false).length;
         document.getElementById('blockCount').textContent = `${count} ${t('blocks_count')}`;
     });
@@ -199,9 +217,11 @@ function displayCode() {
     if (currentTab === 'serial') {
         document.getElementById('codeOutput').style.display = 'none';
         document.getElementById('serialOutput').style.display = 'block';
+        document.getElementById('serialInputContainer').style.display = 'flex';
     } else {
         document.getElementById('codeOutput').style.display = 'block';
         document.getElementById('serialOutput').style.display = 'none';
+        document.getElementById('serialInputContainer').style.display = 'none';
     }
 }
 
@@ -320,34 +340,85 @@ async function uploadToRobot() {
 // ===== GUARDAR Y CARGAR PROYECTOS =====
 
 function saveProject() {
-    const xml = Blockly.Xml.workspaceToDom(workspace);
-    const xmlText = Blockly.Xml.domToPrettyText(xml);
-    const blob = new Blob([xmlText], { type: 'text/xml' });
-    const a = document.createElement('a');
-    a.download = 'proyecto_robot.xml';
-    a.href = URL.createObjectURL(blob);
-    a.click();
+    try {
+        let xml;
+        if (Blockly.Xml && typeof Blockly.Xml.workspaceToDom === 'function') {
+            xml = Blockly.Xml.workspaceToDom(workspace);
+        } else if (Blockly.serialization && Blockly.serialization.workspaces) {
+            // Fallback for newer Blockly if Xml is gone (though usually Xml is still there for compat)
+            // But for now let's stick to Xml if possible or try to find where it went
+            console.error("Blockly.Xml.workspaceToDom not found. Check Blockly version.");
+            return;
+        }
+
+        let xmlText;
+        if (Blockly.Xml && typeof Blockly.Xml.domToPrettyText === 'function') {
+            xmlText = Blockly.Xml.domToPrettyText(xml);
+        } else if (Blockly.utils && Blockly.utils.xml && typeof Blockly.utils.xml.domToText === 'function') {
+            xmlText = Blockly.utils.xml.domToText(xml);
+        } else {
+            // Super fallback
+            xmlText = new XMLSerializer().serializeToString(xml);
+        }
+
+        const blob = new Blob([xmlText], {
+            type: 'text/xml'
+        });
+        const a = document.createElement('a');
+        a.download = 'proyecto_robot.xml';
+        a.href = URL.createObjectURL(blob);
+        a.click();
+    } catch (e) {
+        console.error("Error saving project:", e);
+        alert("Error al guardar: " + e.message);
+    }
 }
 
 function loadProject() {
+    console.log('Botón Cargar presionado');
     document.getElementById('loadInput').click();
 }
 
 function loadProjectFile(input) {
+    console.log('Archivo seleccionado');
     const file = input.files[0];
-    if (!file) return;
+    if (!file) {
+        console.log('No se seleccionó archivo');
+        return;
+    }
 
     const reader = new FileReader();
-    reader.onload = function (e) {
+    reader.onload = function(e) {
+        console.log('Archivo leído');
         const xmlText = e.target.result;
         try {
             workspace.clear();
-            const xml = Blockly.Xml.textToDom(xmlText);
-            Blockly.Xml.domToWorkspace(xml, workspace);
-            alert(t('alert_load_success') || 'Proyecto cargado exitosamente');
+
+            // Robust XML parsing for Blockly v10+
+            let xml;
+            if (Blockly.utils && Blockly.utils.xml && typeof Blockly.utils.xml.textToDom === 'function') {
+                xml = Blockly.utils.xml.textToDom(xmlText);
+            } else if (Blockly.Xml && typeof Blockly.Xml.textToDom === 'function') {
+                xml = Blockly.Xml.textToDom(xmlText);
+            } else {
+                // Native DOMParser fallback
+                xml = new DOMParser().parseFromString(xmlText, "text/xml").documentElement;
+            }
+
+            if (Blockly.Xml && typeof Blockly.Xml.domToWorkspace === 'function') {
+                Blockly.Xml.domToWorkspace(xml, workspace);
+            } else {
+                console.error("Blockly.Xml.domToWorkspace not found");
+                throw new Error("Blockly.Xml.domToWorkspace missing");
+            }
+
+            console.log('XML parseado y cargado al workspace');
+
+            const msg = (typeof t === 'function') ? t('alert_load_success') : 'Proyecto cargado exitosamente';
+            alert(msg || 'Proyecto cargado exitosamente');
         } catch (e) {
-            console.error(e);
-            alert('Error al cargar el archivo XML');
+            console.error('Error al cargar XML:', e);
+            alert('Error al cargar el archivo XML: ' + e.message);
         }
     };
     reader.readAsText(file);
@@ -395,8 +466,8 @@ function downloadInstaller() {
     // 1. Texto actualizado para el confirm()
     const confirmDownload = confirm(
         currentLanguage === 'es' ?
-            '📥 Descargar Paquete Chanchiblock (.zip)\n\nNecesitas este paquete para conectar la web con tu ESP32.\n\n✅ Descomprímelo donde quieras\n✅ Ejecuta "START_MiniFlasher.bat" como Administrador\n\n¿Descargar ahora?' :
-            '📥 Download Chanchiblock Package (.zip)\n\nYou need this package to connect the web with your ESP32.\n\n✅ Unzip it anywhere\n✅ Run "START_MiniFlasher.bat" as Administrator\n\nDownload now?'
+        '📥 Descargar Paquete Chanchiblock (.zip)\n\nNecesitas este paquete para conectar la web con tu ESP32.\n\n✅ Descomprímelo donde quieras\n✅ Ejecuta "START_MiniFlasher.bat" como Administrador\n\n¿Descargar ahora?' :
+        '📥 Download Chanchiblock Package (.zip)\n\nYou need this package to connect the web with your ESP32.\n\n✅ Unzip it anywhere\n✅ Run "START_MiniFlasher.bat" as Administrator\n\nDownload now?'
     );
 
     if (confirmDownload) {

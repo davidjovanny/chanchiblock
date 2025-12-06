@@ -12,12 +12,14 @@
     <script src="https://unpkg.com/blockly@10.4.3/javascript_compressed.js"></script>
     <script src="https://unpkg.com/blockly@10.4.3/msg/es.js"></script>
     <script src="https://unpkg.com/blockly@10.4.3/msg/en.js"></script>
-    <script src="libs/socket.io.min.js"></script>
+    <script src="https://unpkg.com/blockly@10.4.3/msg/en.js"></script>
+    <!-- Socket.io CDN -->
+    <script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
 
 
-    <!-- ESPTool.js LOCAL como módulo ES6 -->
+    <!-- ESPTool.js CDN -->
     <script type="module">
-        import { ESPLoader, Transport } from './libs/esptool.bundle.js';
+        import { ESPLoader, Transport } from 'https://unpkg.com/esptool-js@0.5.4/bundle.js';
         // Hacer disponible globalmente
         window.ESPLoader = ESPLoader;
         window.Transport = Transport;
@@ -98,6 +100,11 @@
                 <div class="code-content" id="codeOutput">// El codigo aparecera aquí...</div>
                 <div class="code-content serial-console" id="serialOutput" style="display: none;">Waiting for serial
                     data...</div>
+                <div class="serial-input-container" id="serialInputContainer" style="display: none;">
+                    <input type="text" id="serialInput" placeholder="Enviar comando (ej: A, B, 1)..."
+                        onkeypress="handleSerialKeyPress(event)">
+                    <button class="btn btn-send" onclick="sendSerial()">Enviar</button>
+                </div>
                 <div class="status-bar">
                     <div class="status-indicator">
                         <div class="status-dot" id="serverStatus"></div>
@@ -201,9 +208,9 @@
         <script src="config.js"></script>
         <script src="i18n.js"></script>
         <script src="blocks.js"></script>
-        <script src="generators.js"></script>
-        <script src="webserial.js"></script>
-        <script src="app.js"></script>
+        <script src="generators.js?v=3"></script>
+        <!-- <script src="webserial.js"></script> -->
+        <script src="app.js?v=4"></script>
         <script>
             // Inicializar todo al cargar
             function initEverything() {
