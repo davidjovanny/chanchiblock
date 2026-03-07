@@ -111,6 +111,23 @@ Blockly.Blocks['serial_print_distance_inches'] = {
     }
 };
 
+Blockly.Blocks['sensor_tcs34725_color'] = {
+    init: function() {
+        this.appendDummyInput()
+            .appendField("🎨 " + (currentLanguage === 'es' ? "¿Detecta color" : "Detects color"))
+            .appendField(new Blockly.FieldDropdown([
+                [currentLanguage === 'es' ? "Rojo" : "Red", "RED"],
+                [currentLanguage === 'es' ? "Verde" : "Green", "GREEN"],
+                [currentLanguage === 'es' ? "Azul" : "Blue", "BLUE"],
+                [currentLanguage === 'es' ? "Amarillo" : "Yellow", "YELLOW"]
+            ]), "COLOR")
+            .appendField("?");
+        this.setOutput(true, "Boolean");
+        this.setColour(160);
+        this.setTooltip(currentLanguage === 'es' ? "Retorna verdadero si el sensor detecta el color seleccionado" : "Returns true if the sensor detects the selected color");
+    }
+};
+
 Blockly.Blocks['serial_print_distance_feet'] = {
     init: function() {
         this.appendDummyInput()
@@ -130,6 +147,40 @@ Blockly.Blocks['robot_servo'] = {
             .appendField("🔄 " + (currentLanguage === 'es' ? "Servo a" : "Servo to"))
             .appendField(new Blockly.FieldAngle(90), "ANGLE")
             .appendField("°");
+        this.setPreviousStatement(true, null);
+        this.setNextStatement(true, null);
+        this.setColour(290);
+    }
+};
+Blockly.Blocks['robot_pca_calibrate'] = {
+    init: function() {
+        this.appendDummyInput()
+            .appendField("⚙️ " + (currentLanguage === 'es' ? "Calibrar Servo PCA" : "Calibrate PCA Servo"))
+            .appendField("Pin")
+            .appendField(new Blockly.FieldDropdown([
+                ["0", "0"],
+                ["1", "1"],
+                ["2", "2"],
+                ["3", "3"],
+                ["4", "4"],
+                ["5", "5"],
+                ["6", "6"],
+                ["7", "7"],
+                ["8", "8"],
+                ["9", "9"],
+                ["10", "10"],
+                ["11", "11"],
+                ["12", "12"],
+                ["13", "13"],
+                ["14", "14"],
+                ["15", "15"]
+            ]), "PIN");
+        this.appendValueInput("MIN")
+            .setCheck("Number")
+            .appendField(currentLanguage === 'es' ? "Mínimo" : "Min");
+        this.appendValueInput("MAX")
+            .setCheck("Number")
+            .appendField(currentLanguage === 'es' ? "Máximo" : "Max");
         this.setPreviousStatement(true, null);
         this.setNextStatement(true, null);
         this.setColour(290);
@@ -222,6 +273,16 @@ Blockly.Blocks['gpio_analog_write'] = {
 };
 
 // ===== BLOQUES DE ESTRUCTURA (SETUP/LOOP) =====
+Blockly.Blocks['robot_pca_calibration_mode'] = {
+    init: function() {
+        this.appendDummyInput()
+            .appendField("⚙️ " + (currentLanguage === 'es' ? "Activar Modo Calibración PCA" : "Enable PCA Calibration Mode"));
+        this.setPreviousStatement(true, null);
+        this.setNextStatement(true, null);
+        this.setColour(290);
+        this.setTooltip(currentLanguage === 'es' ? "Permite controlar los servos desde el panel de deslizadores de la web" : "Allows controlling servos from the web slider panel");
+    }
+};
 
 Blockly.Blocks['robot_setup'] = {
     init: function() {
@@ -352,6 +413,7 @@ Blockly.Blocks['wifi_server_setup'] = {
         this.setTooltip(currentLanguage === 'es' ? "Crea una página web con botones para controlar el robot" : "Creates a web page with buttons to control the robot");
     }
 };
+
 
 Blockly.Blocks['wifi_server_get_cmd'] = {
     init: function() {
@@ -524,6 +586,44 @@ Blockly.Blocks['neopixel_effect'] = {
     }
 };
 
+
+
+Blockly.Blocks['robot_pca_servo'] = {
+    init: function() {
+        this.appendDummyInput()
+            .appendField("🤖 " + t('block_pca_servo'))
+            .appendField(t('label_pin'))
+            .appendField(new Blockly.FieldDropdown([
+                ["0", "0"],
+                ["1", "1"],
+                ["2", "2"],
+                ["3", "3"],
+                ["4", "4"],
+                ["5", "5"],
+                ["6", "6"],
+                ["7", "7"],
+                ["8", "8"],
+                ["9", "9"],
+                ["10", "10"],
+                ["11", "11"],
+                ["12", "12"],
+                ["13", "13"],
+                ["14", "14"],
+                ["15", "15"]
+            ]), "PIN");
+        this.appendDummyInput()
+            .appendField(t('label_angle'))
+            .appendField(new Blockly.FieldAngle(90), "ANGLE")
+            .appendField("°");
+        this.setPreviousStatement(true, null);
+        this.setNextStatement(true, null);
+        this.setColour(290);
+        this.setTooltip(t('tooltip_pca_servo'));
+    }
+};
+
+
+
 // Función para obtener el toolbox con traducciones
 function getToolbox() {
     return {
@@ -617,6 +717,9 @@ function getToolbox() {
             }, {
                 "kind": "block",
                 "type": "serial_print_distance_feet"
+            }, {
+                "kind": "block",
+                "type": "sensor_tcs34725_color"
             }]
         }, {
             "kind": "category",
@@ -625,6 +728,15 @@ function getToolbox() {
             "contents": [{
                 "kind": "block",
                 "type": "robot_servo"
+            }, {
+                "kind": "block",
+                "type": "robot_pca_servo"
+            }, {
+                "kind": "block",
+                "type": "robot_pca_calibration_mode"
+            }, {
+                "kind": "block",
+                "type": "robot_pca_calibrate"
             }]
         }, {
             "kind": "category",

@@ -537,10 +537,96 @@ function loadExampleProgram() {
     }
 }
 
+function initServoSliders() {
+    const container = document.getElementById('servoSlidersContainer');
+    container.innerHTML = '';
+
+    for (let i = 0; i <= 15; i++) {
+        const row = document.createElement('div');
+        row.className = 'servo-control-row';
+
+        row.innerHTML = `
+            <div class="mini-controls">
+                <div class="calib-item">
+                    <label>Min: <span id="val-m-${i}">150</span></label>
+                    <input type="range" min="30" max="750" value="150" 
+                           oninput="document.getElementById('val-m-${i}').innerText = this.value"
+                           onchange="updateCalib(${i}, 'm', this.value)">
+                </div>
+                <div class="calib-item">
+                    <label>Max: <span id="val-x-${i}">600</span></label>
+                    <input type="range" min="30" max="750" value="600" 
+                           oninput="document.getElementById('val-x-${i}').innerText = this.value"
+                           onchange="updateCalib(${i}, 'x', this.value)">
+                </div>
+            </div>
+            <div class="main-slider-container">
+                <label><strong>Servo Pin ${i}</strong>: <span id="val-p-${i}">90</span>°</label>
+                <input type="range" min="0" max="180" value="90" 
+                       oninput="document.getElementById('val-p-${i}').innerText = this.value"
+                       onchange="updateAngle(${i}, this.value)">
+            </div>
+        `;
+        container.appendChild(row);
+    }
+}
+// 2. Función para mover el ángulo (Envía comando simple: "12 90")
+function updateAngle(pin, val) {
+    document.getElementById(`val-p-${pin}`).innerText = val;
+    if (socket) {
+        socket.emit('serial_write', {
+            data: `${pin} ${val}`
+        });
+    }
+}
+
+// 3. Función para calibrar (Envía comando con letra: "m 12 150" o "x 12 600")
+function updateCalib(pin, type, val) {
+    document.getElementById(`val-${type}-${pin}`).innerText = val;
+    if (socket) {
+        socket.emit('serial_write', {
+            data: `${type} ${pin} ${val}`
+        });
+    }
+}
+
+// 4. El Modal ahora llama a la función correcta
+function openServoModal() {
+    const container = document.getElementById('servoSlidersContainer');
+    if (container.children.length === 0) {
+        initServoSliders();
+    }
+    document.getElementById('servoModal').classList.add('active');
+}
+
+function closeServoModal() {
+    document.getElementById('servoModal').classList.remove('active');
+}
+
+
+
+function updateServoLabel(pin, value) {
+    document.getElementById(`val_servo_${pin}`).textContent = value;
+}
+
+
+
 function openAboutModal() {
     document.getElementById('aboutModal').classList.add('active');
 }
 
 function closeAboutModal() {
     document.getElementById('aboutModal').classList.remove('active');
+}
+
+function sendServoCommand(pin, value) {
+    const msg = `${pin} ${value}`;
+    if (socket) {
+        socket.emit('serial_write', {
+            data: msg
+        });
+        console.log("Comando enviado:", msg);
+    } else {
+        console.warn("Servidor serial not conected.");
+    }
 }
