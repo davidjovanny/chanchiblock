@@ -187,6 +187,67 @@ Blockly.Blocks['robot_pca_calibrate'] = {
     }
 };
 
+// 1. Bloque de Setup del Brazo (Se usa una sola vez en el Setup)
+Blockly.Blocks['robot_arm_setup'] = {
+    init: function() {
+        this.appendDummyInput().appendField(t('block_arm_setup'));
+        this.appendDummyInput()
+            .appendField(t('label_base')).appendField(new Blockly.FieldNumber(12, 0, 15), "BASE_PIN")
+            .appendField(t('label_hombro')).appendField(new Blockly.FieldNumber(13, 0, 15), "HOMBRO_PIN");
+        this.appendDummyInput()
+            .appendField(t('label_codo')).appendField(new Blockly.FieldNumber(14, 0, 15), "CODO_PIN")
+            .appendField(t('label_pinza')).appendField(new Blockly.FieldNumber(15, 0, 15), "PINZA_PIN");
+        this.setPreviousStatement(true, null);
+        this.setNextStatement(true, null);
+        this.setColour(230); // Color azul para configuración
+    }
+};
+
+// 2. Bloque de Movimiento Combinado (Mueve los 4 a la vez)
+Blockly.Blocks['robot_arm_move'] = {
+    init: function() {
+        this.appendDummyInput().appendField(t('block_arm_move'));
+        this.appendDummyInput()
+            .appendField(t('pos_base')).appendField(new Blockly.FieldAngle(90), "BASE_ANG")
+            .appendField(t('pos_hombro')).appendField(new Blockly.FieldAngle(90), "HOMBRO_ANG");
+        this.appendDummyInput()
+            .appendField(t('pos_codo')).appendField(new Blockly.FieldAngle(90), "CODO_ANG")
+            .appendField(t('pos_pinza')).appendField(new Blockly.FieldAngle(90), "PINZA_ANG");
+        this.setPreviousStatement(true, null);
+        this.setNextStatement(true, null);
+        this.setColour(290); // Morado para motores
+    }
+};
+
+// Bloque para definir la postura (Se usa fuera del Loop para organizar)
+Blockly.Blocks['robot_arm_define'] = {
+    init: function() {
+        this.appendDummyInput()
+            .appendField(t('block_define_posture'))
+            .appendField(new Blockly.FieldTextInput("inicio"), "NAME");
+        this.appendDummyInput()
+            .appendField(t('pos_base')).appendField(new Blockly.FieldAngle(90), "BASE")
+            .appendField(t('pos_hombro')).appendField(new Blockly.FieldAngle(90), "HOMBRO");
+        this.appendDummyInput()
+            .appendField(t('pos_codo')).appendField(new Blockly.FieldAngle(90), "CODO")
+            .appendField(t('pos_pinza')).appendField(new Blockly.FieldAngle(90), "PINZA");
+        this.setColour(160); // Verde agua para memorias
+        this.setTooltip("Graba una posición específica del brazo con un nombre");
+    }
+};
+
+// Bloque para ejecutar la postura
+Blockly.Blocks['robot_arm_run'] = {
+    init: function() {
+        this.appendDummyInput()
+            .appendField(t('block_run_posture'))
+            .appendField(new Blockly.FieldDropdown(() => getPostureList()), "NAME");
+        this.setPreviousStatement(true, null);
+        this.setNextStatement(true, null);
+        this.setColour(160);
+    }
+};
+
 // ===== BLOQUES GPIO (MODIFICADOS PARA VARIABLES) =====
 
 Blockly.Blocks['gpio_pin_mode'] = {
@@ -622,6 +683,22 @@ Blockly.Blocks['robot_pca_servo'] = {
     }
 };
 
+// Función para obtener la lista de posturas creadas
+function getPostureList() {
+    const postures = [];
+    if (typeof workspace !== 'undefined') {
+        const blocks = workspace.getAllBlocks(false);
+        blocks.forEach(block => {
+            if (block.type === 'robot_arm_define') {
+                const name = block.getFieldValue('NAME');
+                if (name) postures.push([name, name]); // [Texto visual, Valor interno]
+            }
+        });
+    }
+    // Si no hay posturas, mostramos una por defecto
+    if (postures.length === 0) postures.push(['...', 'NONE']);
+    return postures;
+}
 
 
 // Función para obtener el toolbox con traducciones
@@ -737,6 +814,18 @@ function getToolbox() {
             }, {
                 "kind": "block",
                 "type": "robot_pca_calibrate"
+            }, {
+                "kind": "block",
+                "type": "robot_arm_setup"
+            }, {
+                "kind": "block",
+                "type": "robot_arm_move"
+            }, {
+                "kind": "block",
+                "type": "robot_arm_define"
+            }, {
+                "kind": "block",
+                "type": "robot_arm_run"
             }]
         }, {
             "kind": "category",

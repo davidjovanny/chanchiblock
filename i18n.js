@@ -85,7 +85,24 @@ const translations = {
         modal_about_h2: "¡Hola! Somos David, Claudio, Geny y Kimmi.", // <-- AÑADIDO
         modal_about_p1: "Hicimos Chanchiblock porque amamos el ESP32, pero estábamos frustrados con las herramientas que existían.", // <-- AÑADIDO
         modal_about_p2: "Creemos que programar un robot debe ser simple y divertido. Esperamos que esta herramienta te ayude a crear cosas increíbles.", // <-- AÑADIDO
-        modal_about_p3: "¡Que la goces!" // <-- AÑADIDO
+        modal_about_p3: "¡Que la goces!", // <-- AÑADIDO
+
+        label_base: "Base (Pin):",
+        label_hombro: "Hombro (Pin):",
+        label_codo: "Codo (Pin):",
+        label_pinza: "Pinza (Pin):",
+        block_arm_setup: "⚙️ Configurar Brazo",
+        block_arm_move: "🤖 Mover Brazo",
+        label_angle: "Grados:",
+
+        pos_base: "Base:",
+        pos_hombro: "Hombro:",
+        pos_codo: "Codo:",
+        pos_pinza: "Pinza:",
+
+        label_posture_name: "Nombre de Postura:",
+        block_define_posture: "📦 Grabar Postura",
+        block_run_posture: "🚀 Ir a Postura"
     },
     en: {
         // Header
@@ -171,7 +188,24 @@ const translations = {
         modal_about_h2: "Hi! We're David, Claudio, Geny, and Kimmi.", // <-- AÑADIDO
         modal_about_p1: "We built Chanchiblock because we love the ESP32, but we were frustrated with the existing tools.", // <-- AÑADIDO
         modal_about_p2: "We believe programming a robot should be simple and fun. We hope this tool helps you build amazing things.", // <-- AÑADIDO
-        modal_about_p3: "Enjoy it!" // <-- AÑADIDO
+        modal_about_p3: "Enjoy it!", // <-- AÑADIDO
+
+        label_base: "Base (Pin):",
+        label_hombro: "Shoulder (Pin):",
+        label_codo: "Elbow (Pin):",
+        label_pinza: "Gripper (Pin):",
+        block_arm_setup: "⚙️ Setup Arm",
+        block_arm_move: "🤖 Move Arm",
+        label_angle: "Degrees:",
+
+        pos_base: "Base:",
+        pos_hombro: "Shoulder:",
+        pos_codo: "Elbow:",
+        pos_pinza: "Gripper:",
+
+        label_posture_name: "Posture Name:",
+        block_define_posture: "📦 Save Posture",
+        block_run_posture: "🚀 Go to Posture"
     }
 };
 
