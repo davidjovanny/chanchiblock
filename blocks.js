@@ -504,7 +504,7 @@ Blockly.Blocks['test_builtin_led'] = {
 Blockly.Blocks['create_variable'] = {
     init: function() {
         this.appendValueInput("VALUE")
-            .setCheck("Number")
+            //.setCheck("Number")
             .appendField("🔢 " + (currentLanguage === 'es' ? "Crear variable" : "Create variable"))
             // CAMBIO CLAVE: FieldVariable en lugar de FieldTextInput
             .appendField(new Blockly.FieldVariable("miVariable"), "VAR_NAME")
@@ -512,7 +512,9 @@ Blockly.Blocks['create_variable'] = {
                 ["int", "int"],
                 ["long", "long"],
                 ["float", "float"],
-                ["bool", "bool"]
+                ["bool", "bool"],
+                ["char", "char"], // <--- AÑADIDO
+                ["String", "String"] // <--- AÑADIDO
             ]), "VAR_TYPE")
             .appendField("=");
         this.setPreviousStatement(true, null);
@@ -758,6 +760,11 @@ function getToolbox() {
                 "kind": "block",
                 "type": "millis_timer"
             }]
+        }, {
+            "kind": "category",
+            "name": "📦 " + (currentLanguage === 'es' ? "Funciones" : "Functions"),
+            "custom": "PROCEDURE", // <--- Esto hace que Blockly cree el botón "Crear función"
+            "colour": 290
         }, {
             "kind": "category",
             "name": "🚗 " + (currentLanguage === 'es' ? "Movimiento" : "Movement"),
