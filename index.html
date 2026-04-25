@@ -42,15 +42,15 @@
             <div class="toolbar">
                 <button class="btn btn-config" onclick="openConfigModal()">
                 <span class="btn-icon">⚙️</span>
-                <span id="btn_config">Configurar Pines</span>
+                <span id="btn_config">Pins Setup</span>
                 </button>
                 <button class="btn btn-generate" onclick="generateCode()">
                 <span class="btn-icon">✅</span>
-                <span id="btn_generate">Generar Codigo</span>
+                <span id="btn_generate">Create Code</span>
                 </button>
                 <button class="btn btn-upload" onclick="uploadToRobot()">
                 <span class="btn-icon">📤</span>
-                <span id="btn_upload">Subir al Robot</span>
+                <span id="btn_upload">Upload to Robot</span>
                 </button>
                 <button class="btn btn-config" style="background-color: #f43f5e;" onclick="openServoModal()">
                 <span class="btn-icon">🎛️</span>
@@ -58,26 +58,31 @@
                 </button>
                 <button class="btn btn-clear" onclick="clearWorkspace()">
                 <span class="btn-icon">🗑️</span>
-                <span id="btn_clear">Limpiar</span>
+                <span id="btn_clear">Delete</span>
                 </button>
                 <button class="btn btn-save" onclick="saveProject()">
                 <span class="btn-icon">💾</span>
-                <span id="btn_save_project">Guardar Proyecto</span>
+                <span id="btn_save_project">Save Project</span>
                 </button>
                 <button class="btn btn-load" onclick="loadProject()">
                 <span class="btn-icon">📂</span>
-                <span id="btn_load_project">Cargar Proyecto</span>
+                <span id="btn_load_project">Load Project</span>
                 </button>
                 <input type="file" id="loadInput" style="display: none;" onchange="loadProjectFile(this)" accept=".xml">
                 <button class="btn btn-download" onclick="downloadInstaller()">
                 <span class="btn-icon">📥</span>
-                <span id="btn_download">Descargar MiniFlasher</span>
+                <span id="btn_download">Download MiniFlasher</span>
                 </button>
+                <a href="remoteControl.exe" download="Control_Robot.exe" style="text-decoration: none;">
+                    <button class="btn btn-download" style="background-color: #8839ef;">
+                    <span class="btn-icon">🎮</span>
+                    <span id="btn_remote_control">Remote Control</span>
+                    </button>
+                </a>
                 <button class="btn btn-about" onclick="openAboutModal()">
                 <span class="btn-icon">🐷</span>
-                <span id="btn_about">Sobre Nosotros</span>
-                </button>
-            </div>
+                <span id="btn_about">Our Us</span>
+</div>
         </div>
         <div class="main-container">
             <div class="blockly-container">
