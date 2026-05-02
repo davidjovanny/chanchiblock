@@ -263,8 +263,32 @@ Blockly.JavaScript.forBlock['bt_read_char'] = function(block) {
     return ['(char)SerialBT.read()', Blockly.JavaScript.ORDER_FUNCTION_CALL];
 };
 
+Blockly.JavaScript.forBlock['bt_is_connected'] = function(block) {
+    // hasClient() es la función real de BluetoothSerial para verificar conexión
+    return ['SerialBT.hasClient()', Blockly.JavaScript.ORDER_FUNCTION_CALL];
+};
+
+Blockly.JavaScript.forBlock['bt_get_address'] = function(block) {
+    // Retorna la MAC del Bluetooth como un String
+    return ['SerialBT.getBtAddressString()', Blockly.JavaScript.ORDER_FUNCTION_CALL];
+};
+
+Blockly.JavaScript.forBlock['bt_get_name'] = function(block) {
+    // Retorna el nombre configurado en el begin()
+    return ['SerialBT.getDeviceName()', Blockly.JavaScript.ORDER_FUNCTION_CALL];
+};
 Blockly.JavaScript.forBlock['test_builtin_led'] = function(block) {
-    return `digitalWrite(${ESP32_BUILTIN_LED}, HIGH);\ndelay(500);\ndigitalWrite(${ESP32_BUILTIN_LED}, LOW);\ndelay(500);\n`;
+    return `
+  static unsigned long previaMilis = 0;
+  static bool estadoLed = LOW;
+  unsigned long actualMilis = millis();
+
+  if (actualMilis - previaMilis >= 500) {
+    previaMilis = actualMilis;
+    estadoLed = !estadoLed;
+    digitalWrite(${ESP32_BUILTIN_LED}, estadoLed);
+  }
+`;
 };
 
 // ===== 6. VARIABLES (SOLUCIÓN DEFINITIVA) =====

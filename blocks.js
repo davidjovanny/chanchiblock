@@ -464,6 +464,37 @@ Blockly.Blocks['bt_read_char'] = {
     }
 };
 
+// Block: Check if a device is connected
+Blockly.Blocks['bt_is_connected'] = {
+    init: function() {
+        this.appendDummyInput()
+            .appendField("📲 " + (currentLanguage === 'es' ? "¿Bluetooth conectado?" : "Bluetooth connected?"));
+        this.setOutput(true, "Boolean");
+        this.setColour(240);
+        this.setTooltip(currentLanguage === 'es' ? "Retorna verdadero si hay un dispositivo enlazado" : "Returns true if a device is connected");
+    }
+};
+
+// Block: Get Bluetooth MAC Address
+Blockly.Blocks['bt_get_address'] = {
+    init: function() {
+        this.appendDummyInput()
+            .appendField("🆔 " + (currentLanguage === 'es' ? "Dirección MAC Bluetooth" : "Bluetooth MAC Address"));
+        this.setOutput(true, "String");
+        this.setColour(240);
+    }
+};
+
+// Block: Get Bluetooth Device Name
+Blockly.Blocks['bt_get_name'] = {
+    init: function() {
+        this.appendDummyInput()
+            .appendField("📛 " + (currentLanguage === 'es' ? "Nombre del Dispositivo" : "Device Name"));
+        this.setOutput(true, "String");
+        this.setColour(240);
+    }
+};
+
 Blockly.Blocks['wifi_server_setup'] = {
     init: function() {
         this.appendDummyInput()
@@ -944,6 +975,15 @@ function getToolbox() {
             }, {
                 "kind": "block",
                 "type": "bt_read_char"
+            }, {
+                "kind": "block",
+                "type": "bt_is_connected"
+            }, {
+                "kind": "block",
+                "type": "bt_get_address"
+            }, {
+                "kind": "block",
+                "type": "bt_get_name"
             }]
         }, {
             "kind": "category",
